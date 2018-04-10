@@ -66,9 +66,38 @@
 
 // PUNTO 1: COLECCIONES
 object coleccionista {
-	
-	//TODO: Completar la implementacion de este objeto		
-
+	var coleccion=#{}
+	//TODO: Completar la implementacion de este objeto
+	method agregarElemento(unElemento){
+		coleccion.add(unElemento)
+	}
+	method quitarElemento(unElemento){
+		coleccion.remove(unElemento)
+	}
+	method objetosFragiles(){
+		return coleccion.filter({elemento => elemento.esFragil()})
+	}
+	method objetoFragilMasCaro(){
+		return self.objetosFragiles().max({elemento=>elemento.valor()})
+	}
+	method valorEnObjetosFragiles() {
+		return self.objetosFragiles().sum({elemento => elemento.valor()})
+	}		
+	method elementosPorCategoria(unaCategoria){
+		return coleccion.filter({elemento=>elemento.categoria()==unaCategoria})
+	}
+	method valorEnCategoria(unaCategoria){
+		return self.elementosPorCategoria(unaCategoria).sum({elemnto=>elemnto.valor()})
+	}
+	method existeElementoDe(unaCategoria){
+		return coleccion.any({elemento=>elemento.categoria()==unaCategoria})
+	}
+	method categorias(){
+		return coleccion.map({elemento=>elemento.categoria()}).asSet()
+	}
+	method todosValiosos(){
+		return coleccion.all({elemento=>elemento.valor()>600})
+	}
 }
 
 
@@ -109,7 +138,33 @@ object musica {
 // PUNTO 2: POLIMORFISMO. 
 object guitarraElectrica {
    //TODO Completar la implementacion de este objeto
+   var microfonos=[microfonoGibson,microfonoDiMarzio]
+   var property estuche
+   
+   method agregarMicrofono(unMicrofono){
+   		microfonos.add(unMicrofono)
+   }
+   method quitarMicrofono(unMicrofono){
+   		microfonos.remove(unMicrofono)
+   }
+   method valorMicrofonos(){
+   		return microfonos.sum({microfono=>microfono.valor()})
+   }
+   method valor() = 10000 + self.valorMicrofonos()
+   method esFragil() = estuche.esFragil()
+   method categoria() = musica
 }
 
 //TODO: agregar los objetos que falten! Si no agregaste ninguno repensá tu solución; pista: el punto se llama "POLIMORFISMO" 
-
+object microfonoGibson{
+	method valor() = 1000	
+}
+object microfonoDiMarzio{
+	method valor() = 800
+}
+object estucheFlexible{
+	method esFragil() = true
+}
+object estucheRigido{
+	method esFragil() = false
+}
